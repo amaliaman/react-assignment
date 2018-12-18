@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
-import CompanyPicker from '../companyPicker/CompanyPicker';
+import CustomerPicker from '../customerPicker/CustomerPicker';
 
 class Landing extends Component {
   render() {
     return (
       <div>
-        <CompanyPicker />
+        <CustomerPicker />
       </div>
     );
   }
