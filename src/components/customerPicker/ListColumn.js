@@ -1,17 +1,15 @@
 import React, { Component } from 'react';
 
-class ListColumn extends Component {
-    
-    getListItem = (value, label) => (
-        <div
-            key={value}
-            onClick={() => this.props.selectItem(value)}
-            className={this.props.selectedItem === value ? 'selected' : null}
-        >
-            {label}
-        </div>
-    )
+const ListItem = props => (
+    <div
+        onClick={() => props.selectItem(props.value)}
+        className={props.selectedItem === props.value ? 'selected' : null}
+    >
+        {props.label}
+    </div>
+);
 
+class ListColumn extends Component {
     render() {
         const { data, isCompany } = this.props;
 
@@ -20,7 +18,15 @@ class ListColumn extends Component {
                 {data && data.map(c => {
                     const value = isCompany ? c.id : c;
                     const label = isCompany ? c.company : c;
-                    return this.getListItem(value, label);
+                    return (
+                        <ListItem
+                            key={value}
+                            value={value}
+                            label={label}
+                            selectItem={this.props.selectItem}
+                            selectedItem={this.props.selectedItem}
+                        />
+                    )
                 })}
             </div>
         );

@@ -1,4 +1,4 @@
-import { observable, action, computed, reaction } from 'mobx';
+import { observable, action, computed } from 'mobx';
 
 import clients from '../data/clients.json';
 
@@ -12,6 +12,7 @@ class CustomersStore {
 
     constructor() {
         this.loadCustomers();
+        this.setDefaults();
     }
 
     /**
@@ -21,7 +22,15 @@ class CustomersStore {
         this.isLoading = true;
         this.customers = clients.Customers;
         this.isLoading = false;
-    }
+    };
+
+    @action setDefaults = () => {
+        if (this.selectedCountry === '') {
+            this.selectedCountry = this.allCountries[0];
+            this.selectedCity = this.citiesByCountry[0];
+            this.selectedCompanyId = this.companiesByCity[0].id;
+        }
+    };
 
     @computed get countriesWithCities() {
         const countriesWithCities = this.customers
@@ -37,7 +46,7 @@ class CustomersStore {
             }, [])
             .sort((a, b) => {
                 const numeric = b.cities.length - a.cities.length;
-                if (!numeric) {
+                if (numeric === 0) {
                     if (a.country < b.country) { return -1; }
                     if (a.country > b.country) { return 1; }
                     return 0;
@@ -52,10 +61,9 @@ class CustomersStore {
             .map(c => c.country);
     }
 
-    defaultCountry = reaction(
-        () => this.allCountries.map(c => c),
-        countries => { this.selectedCountry = countries[0]; }
-    );
+
+
+
 
     @computed get citiesByCountryWithCompanies() {
         const citiesByCountryWithCompanies = this.selectedCountry &&
@@ -70,7 +78,7 @@ class CustomersStore {
                 }))
                 .sort((a, b) => {
                     const numeric = b.companies.length - a.companies.length;
-                    if (!numeric) {
+                    if (numeric === 0) {
                         if (a.city < b.city) { return -1; }
                         if (a.city > b.city) { return 1; }
                         return 0;
