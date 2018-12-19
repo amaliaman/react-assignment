@@ -7,11 +7,13 @@ import MapContainer from '../maps/MapContainer';
 @inject(stores => {
     const { allCountries, selectCountry, selectedCountry,
         citiesByCountry, selectCity, selectedCity,
-        companiesByCity, selectCompany, selectedCompanyId, currentAddress, currentLocation } = stores.store;
+        companiesByCity, selectCompany, selectedCompanyId,
+        fetchedAddress, currentLocation, mapErrorMessage } = stores.store;
     return {
         allCountries, selectCountry, selectedCountry,
         citiesByCountry, selectCity, selectedCity,
-        companiesByCity, selectCompany, selectedCompanyId, currentAddress, currentLocation
+        companiesByCity, selectCompany, selectedCompanyId,
+        fetchedAddress, currentLocation, mapErrorMessage
     };
 })
 @observer
@@ -37,10 +39,8 @@ class CustomerPicker extends Component {
                     selectedItem={this.props.selectedCompanyId}
                     isCompany={true}
                 />
-                <div>{this.props.currentAddress}</div>
-                <div>{this.props.currentLocation && this.props.currentLocation.lat}</div>
 
-                <MapContainer location={this.props.currentLocation} />
+                <MapContainer location={this.props.currentLocation} address={this.props.fetchedAddress} error={this.props.mapErrorMessage} />
             </div>
         );
     }

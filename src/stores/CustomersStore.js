@@ -2,6 +2,7 @@ import { observable, action, computed, reaction } from 'mobx';
 
 import clients from '../data/clients.json';
 import googleApiUtils from '../utils/GoogleApiUtils';
+import * as strings from '../constants/strings';
 
 class CustomersStore {
     @observable customers = [];
@@ -9,21 +10,16 @@ class CustomersStore {
     @observable selectedCity = '';
     @observable selectedCompanyId = '';
     @observable currentLocation = null;
-
-    @observable isLoading = true;///////////// implement
+    @observable fetchedAddress = '';
+    @observable mapErrorMessage = '';
 
     constructor() {
         this.loadCustomers();
         this.setDefaults();
     }
 
-    /**
-     * Fetches all customers from the json file
-     */
     @action loadCustomers = () => {
-        this.isLoading = true;
         this.customers = clients.Customers;
-        this.isLoading = false;
     };
 
     @action setDefaults = () => {
@@ -122,9 +118,14 @@ class CustomersStore {
         () => this.currentAddress,
         async address => {
             if (address) {
-                const a = await googleApiUtils.geocodeAddress(address);
-                console.log(a.results[0].geometry.location);
-                this.currentLocation = a.results[0].geometry.location;
+                const response = await googleApiUtils.geocodeAddress(address);
+                if (response.status === 'OK') {
+                    this.currentLocation = response.results[0].geometry.location;
+                    this.fetchedAddress = response.results[0].formatted_address;
+                }
+                else {
+                    this.mapErrorMessage = `${strings.MAP_ERROR}${this.currentAddress} `
+                }
             }
             else {
                 this.currentLocation = null;

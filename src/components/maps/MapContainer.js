@@ -31,20 +31,32 @@ class MapContainer extends Component {
     };
 
     render() {
+        if (this.props.error) {
+            return <div className='map-error'>{this.props.error}</div>
+        }
+
         const location = this.props.location ? this.props.location : { lat: 0, lng: 0 };
+        const isVisible = this.props.location ? true : false;
+
         return (
             <Map
                 google={this.props.google}
                 zoom={17}
                 style={mapStyles}
                 center={location}
-                >
+                visible={isVisible}
+            >
                 <Marker
                     onClick={this.onMarkerClick}
-                    name={'Kenyatta International Convention Centre'}
-                    title='sdfsdf'
                     position={location}
                 />
+                <InfoWindow
+                    marker={this.state.activeMarker}
+                    visible={this.state.showingInfoWindow}
+                    onClose={this.onClose}
+                >
+                    <div>{this.props.address}</div>
+                </InfoWindow>
             </Map>
         );
     }
