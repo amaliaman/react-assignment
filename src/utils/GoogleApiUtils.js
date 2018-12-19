@@ -1,11 +1,11 @@
 import ajaxUtils from './AjaxUtils';
+import { HTTP_METHODS } from '../constants/strings';
+import * as env from '../constants/env';
 
 class GoogleApiUtils {
-    key = 'AIzaSyBDgy2yW_NWIkjA9IkIx2Z1VpSu8AUSGV0'; // REMOVE////////////
-
     geocodeAddress = address => {
-        const url = `https://maps.googleapis.com/maps/api/geocode/json?address=${address}&key=${this.key}`;
-        return ajaxUtils.queryApi('get', url);
+        const url = `${env.API_URL}?${env.QS_PARAM_ADDRESS}=${address}&${env.QS_PARAM_KEY}=${env.API_KEY}`;
+        return ajaxUtils.queryApi(HTTP_METHODS.get, url);
     };
 }
 
