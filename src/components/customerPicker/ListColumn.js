@@ -12,7 +12,7 @@ class ListColumn extends Component {
 
         return (
             <div>
-                <h3>{this.props.title}</h3>
+                <div className='title'>{this.props.title}</div>
                 <div className='list'>
                     {data && data.map(c => {
                         const value = isCompany ? c.id : c;

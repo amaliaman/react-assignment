@@ -4,9 +4,8 @@ import { Map, GoogleApiWrapper, Marker, InfoWindow } from 'google-maps-react';
 import { API_KEY } from '../../constants/env';
 
 const mapStyles = {
-    width: '100%',
-    height: '100%',
-    position: 'relative'
+    width: '415px',
+    height: '260px'
 };
 
 class MapContainer extends Component {
@@ -36,7 +35,7 @@ class MapContainer extends Component {
         if (this.props.error) {
             return (
                 <Fragment>
-                    <h3>{this.props.title}</h3>
+                    <div className='title'>{this.props.title}</div>
                     <div className='map-error'>{this.props.error}</div>
                 </Fragment>
             )
@@ -47,26 +46,28 @@ class MapContainer extends Component {
 
         return (
             <div className='map-container'>
-                <h3>{this.props.title}</h3>
-                <Map
-                    google={this.props.google}
-                    zoom={17}
-                    style={mapStyles}
-                    center={location}
-                    visible={isVisible}
-                >
-                    <Marker
-                        onClick={this.onMarkerClick}
-                        position={location}
-                    />
-                    <InfoWindow
-                        marker={this.state.activeMarker}
-                        visible={this.state.showingInfoWindow}
-                        onClose={this.onClose}
+                <div className='title'>{this.props.title}</div>
+                <div className='map-wrapper'>
+                    <Map
+                        google={this.props.google}
+                        zoom={17}
+                        style={mapStyles}
+                        center={location}
+                        visible={isVisible}
                     >
-                        <div>{this.props.address}</div>
-                    </InfoWindow>
-                </Map>
+                        <Marker
+                            onClick={this.onMarkerClick}
+                            position={location}
+                        />
+                        <InfoWindow
+                            marker={this.state.activeMarker}
+                            visible={this.state.showingInfoWindow}
+                            onClose={this.onClose}
+                        >
+                            <div>{this.props.address}</div>
+                        </InfoWindow>
+                    </Map>
+                </div>
             </div>
         );
     }

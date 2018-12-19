@@ -117,6 +117,7 @@ class CustomersStore {
     getGeocode = reaction(
         () => this.currentAddress,
         async address => {
+            this.mapErrorMessage = '';
             if (address) {
                 const response = await googleApiUtils.geocodeAddress(address);
                 if (response.status === 'OK') {
@@ -124,7 +125,7 @@ class CustomersStore {
                     this.fetchedAddress = response.results[0].formatted_address;
                 }
                 else {
-                    this.mapErrorMessage = `${strings.MAP_ERROR}${this.currentAddress} `
+                    this.mapErrorMessage = `${strings.MAP_ERROR}${this.currentAddress}.`;
                 }
             }
             else {

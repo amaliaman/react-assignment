@@ -1,6 +1,8 @@
 :root {
     --bg-color: #f5f5f5;
     --picker-bg-color: #ffffff;
+    --border-color: #787878;
+    --blue: #007aff;
 }
 
 body {
@@ -16,43 +18,77 @@ body {
 
 .picker-container {
     display: flex;
+    border-radius: 8px;
     background-color: var(--picker-bg-color);
-    width: 1060px;
+    width: 850px;
+    height: 300px;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
     margin: auto;
-    height: 375px;
+    box-shadow: 0 0 12px #909090;
+}
+
+.picker-container>div:last-child {
+    width: 50%;
 }
 
 .columns-wrapper {
     width: 50%;
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-columns: repeat(3, 142px);
+    height: 100%;
 }
 
-.list{
-    height:100%;
+.list {
+    height: 265px;
+    margin-block-start: 5px;
     overflow-y: scroll;
 }
 
-
 .list div {
+    color: var(--blue);
     cursor: pointer;
-    padding: 5px 10px;
+    padding: 10px 16px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .list div.selected {
     color: white;
-    background-color: blueviolet;
-    border-radius: 10px;
+    background-color: var(--blue);
+    border-radius: 4px;
 }
 
+/* Titles */
+
+.title {
+    height: 30px;
+    font-weight: 500;
+    font-size: 1.2rem;
+    border-bottom: 1px solid var(--border-color);
+    box-sizing: border-box;
+    padding: 3px 8px 0px 8px;
+}
+
+/* Map */
+
 .map-error {
-    padding: 10px;
-    border: 1px solid red;
-    border-radius: 10px;
+    padding: 8px;
+    border: 1px solid crimson;
+    border-radius: 4px;
+    margin: 5px;
+}
+
+.map-wrapper {
+    margin-block-end: 10px;
 }
 
 .map-container {
-    width: 300px;
-    height: 300px;
+    width: 100%;
+    height: 335px;
     position: relative;
 }
