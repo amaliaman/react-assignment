@@ -1,12 +1,14 @@
-import { observable, action, computed } from 'mobx';
+import { observable, action, computed, reaction } from 'mobx';
 
 import clients from '../data/clients.json';
+import googleApiUtils from '../utils/GoogleApiUtils';
 
 class CustomersStore {
     @observable customers = [];
     @observable selectedCountry = '';
     @observable selectedCity = '';
     @observable selectedCompanyId = '';
+    @observable currentLocation = null;
 
     @observable isLoading = true;///////////// implement
 
@@ -107,7 +109,28 @@ class CustomersStore {
             : null;
     }
 
+    @computed get currentAddress() {
+        if (this.selectedCompanyId) {
+            const customer = this.customers.find(c => c.Id === this.selectedCompanyId);
+            const address = `${customer.Address}, ${customer.City}, ${customer.Country}`;
+            return address;
+        }
+        return null;
+    };
 
+    getGeocode = reaction(
+        () => this.currentAddress,
+        async address => {
+            if (address) {
+                const a = await googleApiUtils.geocodeAddress(address);
+                console.log(a.results[0].geometry.location);
+                this.currentLocation = a.results[0].geometry.location;
+            }
+            else {
+                this.currentLocation = null;
+            }
+        }
+    );
 
     @action selectCountry = country => {
         this.selectedCountry = country;

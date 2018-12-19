@@ -2,15 +2,16 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 
 import ListColumn from './ListColumn';
+import MapContainer from '../maps/MapContainer';
 
 @inject(stores => {
     const { allCountries, selectCountry, selectedCountry,
         citiesByCountry, selectCity, selectedCity,
-        companiesByCity, selectCompany, selectedCompanyId } = stores.store;
+        companiesByCity, selectCompany, selectedCompanyId, currentAddress, currentLocation } = stores.store;
     return {
         allCountries, selectCountry, selectedCountry,
         citiesByCountry, selectCity, selectedCity,
-        companiesByCity, selectCompany, selectedCompanyId
+        companiesByCity, selectCompany, selectedCompanyId, currentAddress, currentLocation
     };
 })
 @observer
@@ -36,6 +37,10 @@ class CustomerPicker extends Component {
                     selectedItem={this.props.selectedCompanyId}
                     isCompany={true}
                 />
+                <div>{this.props.currentAddress}</div>
+                <div>{this.props.currentLocation && this.props.currentLocation.lat}</div>
+
+                <MapContainer location={this.props.currentLocation} />
             </div>
         );
     }
