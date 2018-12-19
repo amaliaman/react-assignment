@@ -1,27 +1,25 @@
-import { observable, action, computed } from 'mobx';
+import { observable, action, computed, reaction } from 'mobx';
 
 import clients from '../data/clients.json';
+import googleApiUtils from '../utils/GoogleApiUtils';
+import * as strings from '../constants/strings';
 
 class CustomersStore {
     @observable customers = [];
     @observable selectedCountry = '';
     @observable selectedCity = '';
     @observable selectedCompanyId = '';
-
-    @observable isLoading = true;///////////// implement
+    @observable currentLocation = null;
+    @observable fetchedAddress = '';
+    @observable mapErrorMessage = '';
 
     constructor() {
         this.loadCustomers();
         this.setDefaults();
     }
 
-    /**
-     * Fetches all customers from the json file
-     */
     @action loadCustomers = () => {
-        this.isLoading = true;
         this.customers = clients.Customers;
-        this.isLoading = false;
     };
 
     @action setDefaults = () => {
@@ -107,7 +105,33 @@ class CustomersStore {
             : null;
     }
 
+    @computed get currentAddress() {
+        if (this.selectedCompanyId) {
+            const customer = this.customers.find(c => c.Id === this.selectedCompanyId);
+            const address = `${customer.Address}, ${customer.City}, ${customer.Country}`;
+            return address;
+        }
+        return null;
+    };
 
+    getGeocode = reaction(
+        () => this.currentAddress,
+        async address => {
+            if (address) {
+                const response = await googleApiUtils.geocodeAddress(address);
+                if (response.status === 'OK') {
+                    this.currentLocation = response.results[0].geometry.location;
+                    this.fetchedAddress = response.results[0].formatted_address;
+                }
+                else {
+                    this.mapErrorMessage = `${strings.MAP_ERROR}${this.currentAddress} `
+                }
+            }
+            else {
+                this.currentLocation = null;
+            }
+        }
+    );
 
     @action selectCountry = country => {
         this.selectedCountry = country;

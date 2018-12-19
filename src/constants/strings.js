@@ -1,0 +1,1 @@
+export const MAP_ERROR = 'Couldn\'t locate the following address: ';
