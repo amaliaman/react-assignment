@@ -58,7 +58,7 @@ body {
 }
 
 .list div.selected {
-    color: white;
+    color: var(--picker-bg-color);
     background-color: var(--blue);
     border-radius: 4px;
 }
