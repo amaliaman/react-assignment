@@ -2,17 +2,13 @@ import React, { Component, Fragment } from 'react';
 import { Map, GoogleApiWrapper, Marker, InfoWindow } from 'google-maps-react';
 
 import { API_KEY } from '../../constants/env';
-
-const mapStyles = {
-    width: '415px',
-    height: '260px'
-};
+import * as dim from '../../constants/dimensions';
 
 class MapContainer extends Component {
     state = {
-        showingInfoWindow: false,  //Hides or the shows the infoWindow
-        activeMarker: {},          //Shows the active marker upon click
-        selectedPlace: {}          //Shows the infoWindow to the selected place upon a marker
+        showingInfoWindow: false,
+        activeMarker: {},
+        selectedPlace: {}
     };
 
     onMarkerClick = (props, marker, e) =>
@@ -32,6 +28,7 @@ class MapContainer extends Component {
     };
 
     render() {
+        // Show only error message (if there's one)
         if (this.props.error) {
             return (
                 <Fragment>
@@ -41,7 +38,8 @@ class MapContainer extends Component {
             )
         }
 
-        const location = this.props.location ? this.props.location : { lat: 0, lng: 0 };
+        // Show only map (if everything's OK)
+        const location = this.props.location ? this.props.location : dim.defaultLocation;
         const isVisible = this.props.location ? true : false;
 
         return (
@@ -50,8 +48,8 @@ class MapContainer extends Component {
                 <div className='map-wrapper'>
                     <Map
                         google={this.props.google}
-                        zoom={17}
-                        style={mapStyles}
+                        zoom={dim.initialZoom}
+                        style={dim.mapStyles}
                         center={location}
                         visible={isVisible}
                     >
