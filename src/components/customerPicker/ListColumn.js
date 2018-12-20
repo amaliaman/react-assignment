@@ -11,18 +11,21 @@ class ListColumn extends Component {
         const { data, isCompany, selectedItem, selectItem } = this.props;
 
         return (
-            <div className='list'>
-                {data && data.map(c => {
-                    const value = isCompany ? c.id : c;
-                    return (
-                        <ListItem
-                            key={value}
-                            label={isCompany ? c.company : c}
-                            handleClick={() => selectItem(value)}
-                            cssClass={selectedItem === value ? 'selected' : null}
-                        />
-                    )
-                })}
+            <div>
+                <div className='title'>{this.props.title}</div>
+                <div className='list'>
+                    {data && data.map(c => {
+                        const value = isCompany ? c.id : c;
+                        return (
+                            <ListItem
+                                key={value}
+                                label={isCompany ? c.company : c}
+                                handleClick={() => selectItem(value)}
+                                cssClass={selectedItem === value ? 'selected' : null}
+                            />
+                        )
+                    })}
+                </div>
             </div>
         );
     }

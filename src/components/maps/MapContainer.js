@@ -1,17 +1,14 @@
-import React, { Component } from 'react';
-
+import React, { Component, Fragment } from 'react';
 import { Map, GoogleApiWrapper, Marker, InfoWindow } from 'google-maps-react';
 
-const mapStyles = {
-    width: '60%',
-    height: '100%'
-};
+import { API_KEY } from '../../constants/env';
+import * as dim from '../../constants/dimensions';
 
 class MapContainer extends Component {
     state = {
-        showingInfoWindow: false,  //Hides or the shows the infoWindow
-        activeMarker: {},          //Shows the active marker upon click
-        selectedPlace: {}          //Shows the infoWindow to the selected place upon a marker
+        showingInfoWindow: false,
+        activeMarker: {},
+        selectedPlace: {}
     };
 
     onMarkerClick = (props, marker, e) =>
@@ -31,37 +28,49 @@ class MapContainer extends Component {
     };
 
     render() {
+        // Show only error message (if there's one)
         if (this.props.error) {
-            return <div className='map-error'>{this.props.error}</div>
+            return (
+                <Fragment>
+                    <div className='title'>{this.props.title}</div>
+                    <div className='map-error'>{this.props.error}</div>
+                </Fragment>
+            )
         }
 
-        const location = this.props.location ? this.props.location : { lat: 0, lng: 0 };
+        // Show only map (if everything's OK)
+        const location = this.props.location ? this.props.location : dim.defaultLocation;
         const isVisible = this.props.location ? true : false;
 
         return (
-            <Map
-                google={this.props.google}
-                zoom={17}
-                style={mapStyles}
-                center={location}
-                visible={isVisible}
-            >
-                <Marker
-                    onClick={this.onMarkerClick}
-                    position={location}
-                />
-                <InfoWindow
-                    marker={this.state.activeMarker}
-                    visible={this.state.showingInfoWindow}
-                    onClose={this.onClose}
-                >
-                    <div>{this.props.address}</div>
-                </InfoWindow>
-            </Map>
+            <div className='map-container'>
+                <div className='title'>{this.props.title}</div>
+                <div className='map-wrapper'>
+                    <Map
+                        google={this.props.google}
+                        zoom={dim.initialZoom}
+                        style={dim.mapStyles}
+                        center={location}
+                        visible={isVisible}
+                    >
+                        <Marker
+                            onClick={this.onMarkerClick}
+                            position={location}
+                        />
+                        <InfoWindow
+                            marker={this.state.activeMarker}
+                            visible={this.state.showingInfoWindow}
+                            onClose={this.onClose}
+                        >
+                            <div>{this.props.address}</div>
+                        </InfoWindow>
+                    </Map>
+                </div>
+            </div>
         );
     }
 }
 
 export default GoogleApiWrapper({
-    apiKey: 'AIzaSyBDgy2yW_NWIkjA9IkIx2Z1VpSu8AUSGV0'
+    apiKey: API_KEY
 })(MapContainer);

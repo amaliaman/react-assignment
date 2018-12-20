@@ -1,31 +1,32 @@
 import axios from 'axios';
 
-class AjaxUtils {
-    constructor() {
-        this.MEETINGS_PATH = '/meetings';
-        this.DEPARTMENTS_PATH = '/departments';
-        this.ATTENDEES_PATH = '/attendees';
-        this.LATEST_PATH = '/latest';
-    }
+import { HTTP_METHODS, AJAX_ERROR } from '../constants/strings';
 
+class AjaxUtils {
+    /**
+     * Handle ajax calls centrally
+     * @param {String} method The chosen HTTP method
+     * @param {String} url The url to request
+     * @param {Object} body The body of the request, optional
+     */
     queryApi = async (method, url, body) => {
         let response;
         try {
             switch (method) {
-                case 'get':
+                case HTTP_METHODS.get:
                     response = await axios.get(url);
                     break;
-                case 'post':
+                case HTTP_METHODS.post:
                     response = await axios.post(url, body);
                     break;
-                case 'put':
+                case HTTP_METHODS.put:
                     response = await axios.put(url, body);
                     break;
-                case 'delete':
+                case HTTP_METHODS.delete:
                     response = await axios.delete(url);
                     break;
                 default:
-                    throw new Error(`Unexpected method: ${method}`);
+                    throw new Error(`${AJAX_ERROR}${method}`);
             }
             return response.data;
         }
