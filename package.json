@@ -2,6 +2,7 @@
   "name": "browzwear",
   "version": "0.1.0",
   "private": true,
+  "homepage": "https://amaliaman.github.io/react-assignment/",
   "dependencies": {
     "@babel/core": "7.1.0",
     "@babel/plugin-proposal-decorators": "^7.2.2",
@@ -29,6 +30,7 @@
     "file-loader": "2.0.0",
     "fork-ts-checker-webpack-plugin-alt": "0.4.14",
     "fs-extra": "7.0.0",
+    "gh-pages": "^2.0.1",
     "google-maps-react": "^2.0.2",
     "html-webpack-plugin": "4.0.0-alpha.2",
     "identity-obj-proxy": "3.0.0",
@@ -61,7 +63,9 @@
   "scripts": {
     "start": "node scripts/start.js",
     "build": "node scripts/build.js",
-    "test": "node scripts/test.js"
+    "test": "node scripts/test.js",
+    "predeploy": "npm run build",
+    "deploy":"gh-pages -d build"
   },
   "eslintConfig": {
     "extends": "react-app"
