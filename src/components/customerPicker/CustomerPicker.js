@@ -21,7 +21,7 @@ import { TITLES } from '../../constants/strings';
 class CustomerPicker extends Component {
     render() {
         return (
-            <div className='picker-container'>123123
+            <div className='picker-container'>
                 <div className='columns-wrapper'>
                     <ListColumn
                         title={TITLES.countries}
